@@ -211,7 +211,7 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 }
 
 func (s *Server) initI18n(engine *gin.Engine) error {
-	bundle := i18n.NewBundle(language.SimplifiedChinese)
+	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 	err := fs.WalkDir(i18nFS, "translation", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -259,7 +259,7 @@ func (s *Server) initI18n(engine *gin.Engine) error {
 		if len(names) != len(params) {
 			return "", common.NewError("find names:", names, "---------- params:", params, "---------- num not equal")
 		}
-		templateData := map[string]interface{}{}
+		templateData := map[string]any{}
 		for i := range names {
 			templateData[names[i]] = params[i]
 		}

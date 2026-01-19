@@ -94,7 +94,7 @@ func (p *process) GetResult() string {
 	if p.lines.Empty() && p.exitErr != nil {
 		return p.exitErr.Error()
 	}
-	items, _ := p.lines.TakeUntil(func(item interface{}) bool {
+	items, _ := p.lines.TakeUntil(func(item any) bool {
 		return true
 	})
 	lines := make([]string, 0, len(items))

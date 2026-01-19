@@ -13,7 +13,7 @@ import (
 type Msg struct {
 	Success bool        `json:"success"`
 	Msg     string      `json:"msg"`
-	Obj     interface{} `json:"obj"`
+	Obj     any `json:"obj"`
 }
 
 type Pager struct {
@@ -23,7 +23,7 @@ type Pager struct {
 	OrderBy  string      `json:"order_by"`
 	Desc     bool        `json:"desc"`
 	Key      string      `json:"key"`
-	List     interface{} `json:"list"`
+	List     any `json:"list"`
 }
 
 type AllSetting struct {

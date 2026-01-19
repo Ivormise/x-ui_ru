@@ -25,34 +25,34 @@ func InitLogger(level logging.Level) {
 	logger = newLogger
 }
 
-func Debug(args ...interface{}) {
+func Debug(args ...any) {
 	logger.Debug(args...)
 }
 
-func Debugf(format string, args ...interface{}) {
+func Debugf(format string, args ...any) {
 	logger.Debugf(format, args...)
 }
 
-func Info(args ...interface{}) {
+func Info(args ...any) {
 	logger.Info(args...)
 }
 
-func Infof(format string, args ...interface{}) {
+func Infof(format string, args ...any) {
 	logger.Infof(format, args...)
 }
 
-func Warning(args ...interface{}) {
+func Warning(args ...any) {
 	logger.Warning(args...)
 }
 
-func Warningf(format string, args ...interface{}) {
+func Warningf(format string, args ...any) {
 	logger.Warningf(format, args...)
 }
 
-func Error(args ...interface{}) {
+func Error(args ...any) {
 	logger.Error(args...)
 }
 
-func Errorf(format string, args ...interface{}) {
+func Errorf(format string, args ...any) {
 	logger.Errorf(format, args...)
 }
