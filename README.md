@@ -24,6 +24,21 @@ bash <(curl -Ls https://raw.githubusercontent.com/Ivormise/x-ui_ru/main/install.
 ```
 *Примечание: Скрипт установки теперь поддерживает выбор языка.*
 
+### Удаление
+
+Для полного удаления панели и очистки системы выполните:
+
+```bash
+systemctl stop x-ui
+systemctl disable x-ui
+rm /etc/systemd/system/x-ui.service -f
+systemctl daemon-reload
+systemctl reset-failed
+rm /etc/x-ui/ -rf
+rm /usr/local/x-ui/ -rf
+rm /usr/bin/x-ui -f
+```
+
 ### Ручная установка / Сборка из исходников
 
 Для сборки требуется **Go 1.22** или выше.
