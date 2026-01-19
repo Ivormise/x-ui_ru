@@ -20,7 +20,7 @@
 ### Автоматическая установка (Linux)
 
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/Ivormise/x-ui_ru/main/install.sh)
 ```
 *Примечание: Скрипт установки теперь поддерживает выбор языка.*
 
