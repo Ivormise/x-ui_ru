@@ -41,15 +41,25 @@ rm /usr/bin/x-ui -f
 
 ### Ручная установка / Сборка из исходников
 
-Для сборки требуется **Go 1.22** или выше.
+Для сборки требуется **Go 1.22** или выше. Проект поддерживает сборку на **Linux, macOS и Windows**.
+
+> [!NOTE]
+> В проекте используется CGO-free драйвер SQLite (`github.com/glebarez/sqlite`), что позволяет собирать проект на Windows без необходимости установки GCC/MinGW.
 
 1.  Скачайте исходный код.
 2.  Перейдите в директорию проекта.
 3.  Запустите сборку:
 
+**Linux / macOS:**
 ```bash
 go mod tidy
 go build -o x-ui main.go
+```
+
+**Windows (PowerShell):**
+```powershell
+go mod tidy
+go build -o x-ui.exe main.go
 ```
 
 ## Использование Docker
