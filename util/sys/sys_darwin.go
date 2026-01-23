@@ -3,7 +3,7 @@
 package sys
 
 import (
-	"github.com/shirou/gopsutil/v3/net"
+	"github.com/shirou/gopsutil/net"
 )
 
 func GetTCPCount() (int, error) {
