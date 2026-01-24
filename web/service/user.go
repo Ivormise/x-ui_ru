@@ -75,6 +75,7 @@ func (s *UserService) UpdateUser(id int, username string, password string) error
 }
 
 func (s *UserService) UpdateFirstUser(username string, password string) error {
+	var err error
 	if username == "" {
 		return errors.New("username can not be empty")
 	} else if password == "" {
@@ -82,7 +83,7 @@ func (s *UserService) UpdateFirstUser(username string, password string) error {
 	}
 	db := database.GetDB()
 	user := &model.User{}
-	err := db.Model(model.User{}).First(user).Error
+	err = db.Model(model.User{}).First(user).Error
 
 	hashedPassword, err2 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err2 != nil {
