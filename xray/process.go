@@ -10,6 +10,7 @@ import (
 	"io/fs"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"runtime"
 	"strings"
@@ -24,24 +25,32 @@ import (
 
 var trafficRegex = regexp.MustCompile("(inbound|outbound)>>>([^>]+)>>>traffic>>>(downlink|uplink)")
 
+func getAbsPath(relative string) string {
+	exePath, err := os.Executable()
+	if err != nil {
+		return relative
+	}
+	return filepath.Join(filepath.Dir(exePath), relative)
+}
+
 func GetBinaryName() string {
 	return fmt.Sprintf("xray-%s-%s", runtime.GOOS, runtime.GOARCH)
 }
 
 func GetBinaryPath() string {
-	return "bin/" + GetBinaryName()
+	return getAbsPath("bin/" + GetBinaryName())
 }
 
 func GetConfigPath() string {
-	return "bin/config.json"
+	return getAbsPath("bin/config.json")
 }
 
 func GetGeositePath() string {
-	return "bin/geosite.dat"
+	return getAbsPath("bin/geosite.dat")
 }
 
 func GetGeoipPath() string {
-	return "bin/geoip.dat"
+	return getAbsPath("bin/geoip.dat")
 }
 
 func stopProcess(p *Process) {
