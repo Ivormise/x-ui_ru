@@ -82,7 +82,7 @@ func (s *UserService) UpdateFirstUser(username string, password string) error {
 	}
 	db := database.GetDB()
 	user := &model.User{}
-	err = db.Model(model.User{}).First(user).Error
+	err := db.Model(model.User{}).First(user).Error
 
 	hashedPassword, err2 := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err2 != nil {
