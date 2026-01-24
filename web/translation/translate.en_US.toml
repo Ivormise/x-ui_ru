@@ -110,7 +110,7 @@
 "grpc_service_name" = "GRPC Service Name"
 "tls" = "TLS"
 "xtls" = "XTLS"
-"enable" = "Enable"
+"enabled" = "Enable"
 "disable" = "Disable"
 "tls_domain" = "TLS Domain"
 "xtls_domain" = "XTLS Domain"
