@@ -111,7 +111,7 @@ func showSetting(show bool) {
 		}
 		fmt.Println("current pannel settings as follows:")
 		fmt.Println("username:", username)
-		fmt.Println("userpasswd:", userpasswd)
+		fmt.Println("userpasswd:", "**********")
 		fmt.Println("port:", port)
 	}
 }

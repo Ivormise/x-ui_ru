@@ -116,26 +116,22 @@ func (s *InboundService) UpdateInbound(inbound *model.Inbound) error {
 		return common.NewError("端口已存在:", inbound.Port)
 	}
 
-	oldInbound, err := s.GetInbound(inbound.Id)
-	if err != nil {
-		return err
-	}
-	oldInbound.Up = inbound.Up
-	oldInbound.Down = inbound.Down
-	oldInbound.Total = inbound.Total
-	oldInbound.Remark = inbound.Remark
-	oldInbound.Enable = inbound.Enable
-	oldInbound.ExpiryTime = inbound.ExpiryTime
-	oldInbound.Listen = inbound.Listen
-	oldInbound.Port = inbound.Port
-	oldInbound.Protocol = inbound.Protocol
-	oldInbound.Settings = inbound.Settings
-	oldInbound.StreamSettings = inbound.StreamSettings
-	oldInbound.Sniffing = inbound.Sniffing
-	oldInbound.Tag = fmt.Sprintf("inbound-%v", inbound.Port)
-
 	db := database.GetDB()
-	return db.Save(oldInbound).Error
+	return db.Model(model.Inbound{}).Where("id = ?", inbound.Id).Updates(map[string]interface{}{
+		"up":              inbound.Up,
+		"down":            inbound.Down,
+		"total":           inbound.Total,
+		"remark":          inbound.Remark,
+		"enable":          inbound.Enable,
+		"expiry_time":     inbound.ExpiryTime,
+		"listen":          inbound.Listen,
+		"port":            inbound.Port,
+		"protocol":        inbound.Protocol,
+		"settings":        inbound.Settings,
+		"stream_settings": inbound.StreamSettings,
+		"sniffing":        inbound.Sniffing,
+		"tag":             fmt.Sprintf("inbound-%v", inbound.Port),
+	}).Error
 }
 
 func (s *InboundService) AddTraffic(traffics []*xray.Traffic) (err error) {
@@ -153,7 +149,7 @@ func (s *InboundService) AddTraffic(traffics []*xray.Traffic) (err error) {
 		}
 	}()
 	for _, traffic := range traffics {
-		if traffic.IsInbound {
+		if traffic.IsInbound && (traffic.Up > 0 || traffic.Down > 0) {
 			err = tx.Where("tag = ?", traffic.Tag).
 				UpdateColumn("up", gorm.Expr("up + ?", traffic.Up)).
 				UpdateColumn("down", gorm.Expr("down + ?", traffic.Down)).

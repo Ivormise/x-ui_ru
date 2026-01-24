@@ -33,6 +33,8 @@ var defaultValueMap = map[string]string{
 	"tgBotToken":         "",
 	"tgBotChatId":        "0",
 	"tgRunTime":          "",
+	"tgBotNotifyShowIp":  "true",
+	"tgBotNotifyShowHostname": "true",
 }
 
 type SettingService struct {
@@ -224,6 +226,14 @@ func (s *SettingService) SetTgbotRuntime(time string) error {
 
 func (s *SettingService) GetTgbotRuntime() (string, error) {
 	return s.getString("tgRunTime")
+}
+
+func (s *SettingService) GetTgBotNotifyShowIp() (bool, error) {
+	return s.getBool("tgBotNotifyShowIp")
+}
+
+func (s *SettingService) GetTgBotNotifyShowHostname() (bool, error) {
+	return s.getBool("tgBotNotifyShowHostname")
 }
 
 func (s *SettingService) GetPort() (int, error) {

@@ -9,6 +9,8 @@ import (
 	"path"
 	"x-ui/config"
 	"x-ui/database/model"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var db *gorm.DB
@@ -24,9 +26,13 @@ func initUser() error {
 		return err
 	}
 	if count == 0 {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte("admin"), bcrypt.DefaultCost)
+		if err != nil {
+			return err
+		}
 		user := &model.User{
 			Username: "admin",
-			Password: "admin",
+			Password: string(hashedPassword),
 		}
 		return db.Create(user).Error
 	}

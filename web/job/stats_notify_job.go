@@ -26,6 +26,8 @@ type StatsNotifyJob struct {
 	xrayService    service.XrayService
 	inboundService service.InboundService
 	settingService service.SettingService
+	cachedIp       string
+	lastIpCheck    time.Time
 }
 
 func NewStatsNotifyJob() *StatsNotifyJob {
@@ -64,38 +66,48 @@ func (j *StatsNotifyJob) Run() {
 	}
 	var info string
 	//get hostname
-	name, err := os.Hostname()
-	if err != nil {
-		fmt.Println("get hostname error:", err)
-		return
+	showHostname, _ := j.settingService.GetTgBotNotifyShowHostname()
+	if showHostname {
+		name, err := os.Hostname()
+		if err != nil {
+			fmt.Println("get hostname error:", err)
+			return
+		}
+		info = fmt.Sprintf("主机名称:%s\r\n", name)
 	}
-	info = fmt.Sprintf("主机名称:%s\r\n", name)
-	//get ip address
-	var ip string
-	netInterfaces, err := net.Interfaces()
-	if err != nil {
-		fmt.Println("net.Interfaces failed, err:", err.Error())
-		return
-	}
+	showIp, _ := j.settingService.GetTgBotNotifyShowIp()
+	if showIp {
+		//get ip address
+		if j.cachedIp == "" || time.Since(j.lastIpCheck) > time.Hour {
+			var ip string
+			netInterfaces, err := net.Interfaces()
+			if err != nil {
+				fmt.Println("net.Interfaces failed, err:", err.Error())
+				return
+			}
 
-	for i := 0; i < len(netInterfaces); i++ {
-		if (netInterfaces[i].Flags & net.FlagUp) != 0 {
-			addrs, _ := netInterfaces[i].Addrs()
+			for i := 0; i < len(netInterfaces); i++ {
+				if (netInterfaces[i].Flags & net.FlagUp) != 0 {
+					addrs, _ := netInterfaces[i].Addrs()
 
-			for _, address := range addrs {
-				if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-					if ipnet.IP.To4() != nil {
-						ip = ipnet.IP.String()
-						break
-					} else {
-						ip = ipnet.IP.String()
-						break
+					for _, address := range addrs {
+						if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+							if ipnet.IP.To4() != nil {
+								ip = ipnet.IP.String()
+								break
+							} else {
+								ip = ipnet.IP.String()
+								break
+							}
+						}
 					}
 				}
 			}
+			j.cachedIp = ip
+			j.lastIpCheck = time.Now()
 		}
+		info += fmt.Sprintf("IP地址:%s\r\n \r\n", j.cachedIp)
 	}
-	info += fmt.Sprintf("IP地址:%s\r\n \r\n", ip)
 
 	//get traffic
 	inbouds, err := j.inboundService.GetAllInbounds()
@@ -122,19 +134,32 @@ func (j *StatsNotifyJob) UserLoginNotify(username string, ip string, time string
 		return
 	}
 	var msg string
-	//get hostname
-	name, err := os.Hostname()
-	if err != nil {
-		fmt.Println("get hostname error:", err)
-		return
+	showHostname, _ := j.settingService.GetTgBotNotifyShowHostname()
+	if showHostname {
+		name, err := os.Hostname()
+		if err == nil {
+			if status == LoginSuccess {
+				msg = fmt.Sprintf("面板登录成功提醒\r\n主机名称:%s\r\n", name)
+			} else if status == LoginFail {
+				msg = fmt.Sprintf("面板登录失败提醒\r\n主机名称:%s\r\n", name)
+			}
+		}
 	}
-	if status == LoginSuccess {
-		msg = fmt.Sprintf("面板登录成功提醒\r\n主机名称:%s\r\n", name)
-	} else if status == LoginFail {
-		msg = fmt.Sprintf("面板登录失败提醒\r\n主机名称:%s\r\n", name)
+
+	if msg == "" {
+		if status == LoginSuccess {
+			msg = "面板登录成功提醒\r\n"
+		} else if status == LoginFail {
+			msg = "面板登录失败提醒\r\n"
+		}
 	}
+
 	msg += fmt.Sprintf("时间:%s\r\n", time)
 	msg += fmt.Sprintf("用户:%s\r\n", username)
-	msg += fmt.Sprintf("IP:%s\r\n", ip)
+
+	showIp, _ := j.settingService.GetTgBotNotifyShowIp()
+	if showIp {
+		msg += fmt.Sprintf("IP:%s\r\n", ip)
+	}
 	j.SendMsgToTgbot(msg)
 }
