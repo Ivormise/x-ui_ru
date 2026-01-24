@@ -105,7 +105,11 @@ func (s *XrayService) RestartXray(isForce bool) error {
 
 	p = xray.NewProcess(xrayConfig)
 	result = ""
-	return p.Start()
+	err = p.Start()
+	if err != nil {
+		logger.Error("start xray failed:", err)
+	}
+	return err
 }
 
 func (s *XrayService) StopXray() error {

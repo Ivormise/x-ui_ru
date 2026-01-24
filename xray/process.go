@@ -14,6 +14,7 @@ import (
 	"runtime"
 	"strings"
 	"time"
+	"x-ui/logger"
 	"x-ui/util/common"
 
 	"github.com/Workiva/go-datastructures/queue"
@@ -213,6 +214,7 @@ func (p *process) Start() (err error) {
 		err := cmd.Run()
 		if err != nil {
 			p.exitErr = err
+			logger.Error("xray exited with error:", err)
 		}
 	}()
 
