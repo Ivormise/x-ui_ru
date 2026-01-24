@@ -19,20 +19,6 @@
     <p>{{ i18n "kcp_type" }}: <a-tag color="green">[[ inbound.kcpType ]]</a-tag></p>
     <p>{{ i18n "kcp_seed" }}: <a-tag color="green">[[ inbound.kcpSeed ]]</a-tag></p>
 </template>
-
-<template v-if="inbound.isGrpc">
-    <p>{{ i18n "grpc_service_name" }}: <a-tag color="green">[[ inbound.serviceName ]]</a-tag></p>
-</template>
-
-<template v-if="inbound.tls || inbound.xtls">
-    <p v-if="inbound.tls">{{ i18n "tls" }}: <a-tag color="green">{{ i18n "enable" }}</a-tag></p>
-    <p v-if="inbound.xtls">{{ i18n "xtls" }}: <a-tag color="green">{{ i18n "enable" }}</a-tag></p>
-</template>
-<template v-else>
-    <p>{{ i18n "tls" }}: <a-tag color="red">{{ i18n "disable" }}</a-tag></p>
-</template>
-<p v-if="inbound.tls">
-    {{ i18n "tls_domain" }}: <a-tag :color="inbound.serverName ? 'green' : 'orange'">[[ inbound.serverName ? inbound.serverName : "{{ i18n "none" }}" ]]</a-tag>
 </p>
 <p v-if="inbound.xtls">
     {{ i18n "xtls_domain" }}: <a-tag :color="inbound.serverName ? 'green' : 'orange'">[[ inbound.serverName ? inbound.serverName : "{{ i18n "none" }}" ]]</a-tag>

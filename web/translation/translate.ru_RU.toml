@@ -110,7 +110,7 @@
 "grpc_service_name" = "Имя сервиса GRPC"
 "tls" = "TLS"
 "xtls" = "XTLS"
-"enable" = "Включено"
+"enabled" = "Включено"
 "disable" = "Выключено"
 "tls_domain" = "Домен TLS"
 "xtls_domain" = "Домен XTLS"

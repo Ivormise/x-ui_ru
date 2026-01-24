@@ -120,18 +120,6 @@
 {{template "js" .}}
 <script>
 
-    const columns = [{
-        title: '{{ i18n "action" }}',
-        align: 'center',
-        width: 30,
-        scopedSlots: { customRender: 'action' },
-    }, {
-        title: '{{ i18n "enable" }}',
-        align: 'center',
-        width: 40,
-        scopedSlots: { customRender: 'enable' },
-    }, {
-        title: "id",
         align: 'center',
         dataIndex: "id",
         width: 30,
